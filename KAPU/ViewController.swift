@@ -7,19 +7,43 @@
 //
 
 import UIKit
+import FirebaseCore
+import FirebaseAuth
+import FirebaseDatabase
 
 class ViewController: UIViewController {
 
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        // Do any additional setup after loading the view, typically from a nib.
+    @IBOutlet private weak var emailField: UITextField!
+    @IBOutlet private weak var firstNameField: UITextField!
+    @IBOutlet private weak var passwordField: UITextField!
+    
+
+    @IBAction private func signUpPressed() {
+        self.signUp()
     }
-
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
+    
+    private func signUp() {
+        guard
+            let email = self.emailField.text,
+            let password = self.passwordField.text,
+            let firstname = self.firstNameField.text else {
+                
+                return
+        }
+        
+        FIRAuth.auth()?.createUser(withEmail: email, password: password) {
+            (user, error) in
+            
+            guard let userId = user?.uid else {
+                
+                print("\(error)")
+                return
+            }
+            
+            let usersTable = FIRDatabase.database().reference().child("users")
+            
+            usersTable.child(userId).setValue(["email" : email, "first_name" : firstname])
+        }
     }
-
-
 }
 

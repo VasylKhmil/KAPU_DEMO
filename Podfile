@@ -4,7 +4,11 @@ platform :ios, '9.0'
 use_frameworks!
 
 target 'KAPU' do
-pod 'Firebase/Core'
+    pod 'Firebase/Core'
+    pod 'Firebase/Messaging'
+    pod 'Firebase/Database'
+    pod 'Firebase/Storage'
+    pod 'Firebase/Auth'
 end
 
 
